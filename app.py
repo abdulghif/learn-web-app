@@ -1,44 +1,6 @@
 import os
 import sys
-import subprocess
 import importlib
-
-# Function to check and install required packages
-def check_install_packages():
-    required_packages = {
-        'streamlit': 'streamlit',
-        'pandas': 'pandas',
-        'numpy': 'numpy',
-        'matplotlib': 'matplotlib',
-        'seaborn': 'seaborn',
-        'sklearn': 'scikit-learn',
-        'pickle': 'pickle-mixin',
-        'plotly': 'plotly'
-    }
-    
-    missing_packages = []
-    
-    for package, pip_name in required_packages.items():
-        try:
-            importlib.import_module(package)
-        except ImportError:
-            missing_packages.append(pip_name)
-    
-    if missing_packages:
-        print(f"Installing missing packages: {', '.join(missing_packages)}")
-        for package in missing_packages:
-            try:
-                subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-                print(f"Successfully installed {package}")
-            except subprocess.CalledProcessError:
-                print(f"Failed to install {package}")
-                sys.exit(1)
-        print("All required packages installed. Restarting application...")
-        # Restart the script to load newly installed packages
-        os.execv(sys.executable, ['python'] + sys.argv)
-
-# Check and install required packages
-check_install_packages()
 
 # Now import the required packages
 import streamlit as st
@@ -47,8 +9,11 @@ import numpy as np
 import pickle
 import matplotlib.pyplot as plt
 import seaborn as sns
-import subprocess
 from scripts.analysis import run_analysis
+
+# Import the scripts instead of running them as subprocesses
+from scripts.generate_dummy_data import generate_dummy_data_func
+from scripts.train_model import train_churn_model
 
 # Setting page config
 st.set_page_config(
@@ -84,20 +49,20 @@ def predict_churn(age, gender, purchase_amount, tenure):
 # Fungsi untuk menjalankan generate_dummy_data.py
 def generate_dummy_data():
     try:
-        result = subprocess.run(['python3', 'scripts/generate_dummy_data.py'], 
-                               capture_output=True, text=True, check=True)
-        return True, result.stdout
-    except subprocess.CalledProcessError as e:
-        return False, f"Error: {e.stderr}"
+        # Call the function directly instead of as a subprocess
+        results = generate_dummy_data_func()
+        return True, results
+    except Exception as e:
+        return False, f"Error: {str(e)}"
 
 # Fungsi untuk menjalankan train_model.py
 def train_model():
     try:
-        result = subprocess.run(['python3', 'scripts/train_model.py'], 
-                               capture_output=True, text=True, check=True)
-        return True, result.stdout
-    except subprocess.CalledProcessError as e:
-        return False, f"Error: {e.stderr}"
+        # Call the function directly instead of as a subprocess
+        model = train_churn_model()
+        return True, "Model successfully trained and saved."
+    except Exception as e:
+        return False, f"Error: {str(e)}"
 
 def main():
     # Sidebar untuk navigasi

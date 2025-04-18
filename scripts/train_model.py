@@ -9,10 +9,10 @@ from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
 
-# Buat direktori models jika belum ada
-os.makedirs('models', exist_ok=True)
-
 def train_churn_model():
+    # Buat direktori models jika belum ada
+    os.makedirs('models', exist_ok=True)
+    
     # Load data
     print("Loading data...")
     df = pd.read_csv('data/customer_data.csv')
