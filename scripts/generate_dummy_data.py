@@ -11,7 +11,7 @@ n_samples = 10000
 # Generate data
 age = np.random.randint(18, 70, n_samples)
 gender = np.random.choice(['Male', 'Female'], n_samples, p=[0.5, 0.5])
-purchase_amount = np.random.normal(500, 200, n_samples)  # mean=500, std=200
+purchase_amount = np.random.normal(1500000, 200000, n_samples)  # mean=500, std=200
 tenure = np.random.randint(1, 120, n_samples)  # in months (1 month to 10 years)
 
 # Standardize variables to make the effect sizes more controllable

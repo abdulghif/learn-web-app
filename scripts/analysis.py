@@ -161,41 +161,65 @@ def run_analysis():
         # Feature importance
         st.subheader('Feature Importance')
         if hasattr(model[-1], 'feature_importances_'):
-            # For transformed feature names
-            preprocessor = model.named_steps['preprocessor']
-            feature_names = []
-            
-            # Get numeric feature names (not transformed)
-            numeric_indices = preprocessor.transformers_[0][2]  
-            numeric_features = [X.columns[i] for i in numeric_indices]
-            feature_names.extend(numeric_features)
-            
-            # Get categorical feature names (transformed with OneHotEncoder)
-            categorical_indices = preprocessor.transformers_[1][2]
-            categorical_features = [X.columns[i] for i in categorical_indices]
-            
-            # For categorical features transformed with OneHotEncoder, we need to get the categories
-            one_hot_encoder = preprocessor.transformers_[1][1]
-            for i, cat_feature in enumerate(categorical_features):
-                categories = one_hot_encoder.categories_[i]
-                # Drop first category as per drop='first' in OneHotEncoder
-                feature_names.extend([f"{cat_feature}_{cat}" for cat in categories[1:]])
-            
-            # Get feature importances
-            importances = model[-1].feature_importances_
-            
-            # Create DataFrame for visualization
-            feature_imp = pd.DataFrame({
-                'Feature': feature_names,
-                'Importance': importances
-            }).sort_values('Importance', ascending=False)
-            
-            fig, ax = plt.subplots(figsize=(10, 8))
-            sns.barplot(x='Importance', y='Feature', data=feature_imp, ax=ax)
-            ax.set_title('Feature Importance')
-            st.pyplot(fig)
+            try:
+                # Try to load feature names from saved information
+                feature_names_path = 'models/feature_names.pkl'
+                if os.path.exists(feature_names_path):
+                    with open(feature_names_path, 'rb') as f:
+                        feature_info = pickle.load(f)
+                    
+                    # Set up feature names list
+                    feature_names = []
+                    
+                    # Add numeric features (no transformation needed for names)
+                    feature_names.extend(feature_info['numeric_features'])
+                    
+                    # Add transformed categorical features
+                    for cat_feature in feature_info['categorical_features']:
+                        # For gender, we only have one feature after OneHotEncoder with drop='first'
+                        # (Male becomes the reference category, only Female gets a column)
+                        if cat_feature == 'gender':
+                            feature_names.append(f"{cat_feature}_Female")
+                        else:
+                            # Handle any other categorical features if you add them in the future
+                            unique_vals = df[cat_feature].unique()
+                            if len(unique_vals) > 1:  # Skip the first category (drop='first')
+                                feature_names.extend([f"{cat_feature}_{val}" for val in unique_vals[1:]])
+                else:
+                    # Fallback: manually define feature names
+                    st.warning("Feature names file not found. Using default feature names.")
+                    feature_names = ['age', 'purchase_amount', 'tenure', 'gender_Female']
+                
+                # Get feature importances
+                importances = model[-1].feature_importances_
+                
+                # Ensure lengths match
+                if len(importances) != len(feature_names):
+                    st.error(f"Mismatch between feature importances ({len(importances)}) and feature names ({len(feature_names)})")
+                    # Fallback: use generic names
+                    feature_names = [f"Feature {i}" for i in range(len(importances))]
+                
+                # Create DataFrame for visualization 
+                feature_imp = pd.DataFrame({
+                    'Feature': feature_names,
+                    'Importance': importances
+                }).sort_values('Importance', ascending=False)
+                
+                fig, ax = plt.subplots(figsize=(10, 8))
+                sns.barplot(x='Importance', y='Feature', data=feature_imp, ax=ax)
+                ax.set_title('Feature Importance')
+                st.pyplot(fig)
+            except Exception as e:
+                st.error(f"Error retrieving feature importances: {str(e)}")
+                st.write("For debugging purposes:")
+                st.write(f"Model structure: {model}")
+                if hasattr(model, 'named_steps'):
+                    if 'classifier' in model.named_steps:
+                        st.write(f"Classifier feature importances shape: {model.named_steps['classifier'].feature_importances_.shape}")
+                    if 'preprocessor' in model.named_steps:
+                        st.write(f"Preprocessor transformers: {model.named_steps['preprocessor'].transformers_}")
         else:
-            st.write("Feature importance tidak tersedia untuk model ini.")
+            st.write("Feature importance is not available for this model.")
 
 if __name__ == "__main__":
     run_analysis()
