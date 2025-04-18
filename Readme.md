@@ -70,7 +70,7 @@ python scripts/train_model.py
 
 ```bash
 # Jalankan aplikasi streamlit
-streamlit run scripts/app.py
+streamlit run app.py
 ```
 
 ### 4. Menggunakan Notebook
