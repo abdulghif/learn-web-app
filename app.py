@@ -61,7 +61,7 @@ def main():
             
             age = st.slider('Usia', min_value=18, max_value=80, value=35, step=1)
             gender = st.selectbox('Gender', options=['Male', 'Female'])
-            purchase_amount = st.number_input('Jumlah Pembelian (Rp)', min_value=0, max_value=2000, value=500, step=50)
+            purchase_amount = st.number_input('Jumlah Pembelian (Rp)', min_value=0, max_value=2000000000, value=500000, step=100000)
             tenure = st.slider('Lama Berlangganan (bulan)', min_value=1, max_value=120, value=24, step=1)
             
             predict_button = st.button('Prediksi Churn')
