@@ -20,6 +20,13 @@ churn_prediction_app/
 │   ├── analysis.py            # Script analisis data
 │   └── helper.py              # Fungsi-fungsi pembantu
 │
+├── requirements.txt           # Daftar dependensi Python
+|
+├── app.py                     # Aplikasi Streamlit utama
+|
+├── testing_app.py              # Aplikasi Streamlit untuk testing
+|
+├── LICENSE                    # Lisensi proyek
 │
 └── README.md                  # Dokumentasi proyek
 ```
