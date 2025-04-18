@@ -4,6 +4,10 @@ import numpy as np
 import os
 from pathlib import Path
 
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
 # Menampilkan judul aplikasi
 st.title("Aplikasi Streamlit Sederhana")
 
@@ -139,3 +143,39 @@ if uploaded_file is not None:
             st.dataframe(df.head())
         except Exception as e:
             st.error(f"Tidak dapat membaca file CSV: {e}")
+
+# ---- Bagian Model Prediksi ----
+st.header("🌼 Prediksi Spesies Bunga Iris")
+
+# Load the iris dataset
+iris = datasets.load_iris()
+X = iris.data  # Features
+y = iris.target  # Target labels
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the RandomForest classifier
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# Streamlit app layout
+st.title("Iris Flower Species Prediction")
+st.write("This app predicts the species of an iris flower based on its features.")
+
+# Input fields for user to enter dimensions
+sepal_length = st.number_input("Sepal Length (cm)", min_value=0.0, max_value=10.0, value=5.0, step=0.1)
+sepal_width = st.number_input("Sepal Width (cm)", min_value=0.0, max_value=10.0, value=3.5, step=0.1)
+petal_length = st.number_input("Petal Length (cm)", min_value=0.0, max_value=10.0, value=1.5, step=0.1)
+petal_width = st.number_input("Petal Width (cm)", min_value=0.0, max_value=10.0, value=0.2, step=0.1)
+
+# Create a button to make predictions
+if st.button("Predict"):
+    # Prepare the input data for prediction
+    input_data = [[sepal_length, sepal_width, petal_length, petal_width]]
+    
+    # Make prediction
+    prediction = model.predict(input_data)
+    
+    # Display the prediction result
+    st.write("Predicted Species:", iris.target_names[prediction[0]])

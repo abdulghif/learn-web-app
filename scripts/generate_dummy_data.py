@@ -7,9 +7,6 @@ def generate_dummy_data_func():
     # Create data directory if it doesn't exist
     os.makedirs('data', exist_ok=True)
 
-    # Set random seed for reproducibility
-    np.random.seed(42)
-
     # Number of samples
     n_samples = 10000
 

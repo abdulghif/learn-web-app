@@ -20,8 +20,6 @@ churn_prediction_app/
 │   ├── analysis.py            # Script analisis data
 │   └── helper.py              # Fungsi-fungsi pembantu
 │
-├── notebooks/
-│   └── end_to_end_process.ipynb  # Proses lengkap dalam notebook
 │
 └── README.md                  # Dokumentasi proyek
 ```
@@ -53,7 +51,7 @@ venv\Scripts\activate
 source venv/bin/activate
 
 # Install library yang diperlukan
-pip install streamlit pandas numpy scikit-learn matplotlib seaborn
+pip install -r requirements.txt
 ```
 
 ### 2. Persiapan Data dan Model
