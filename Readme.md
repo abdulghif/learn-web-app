@@ -73,14 +73,6 @@ python scripts/train_model.py
 streamlit run app.py
 ```
 
-### 4. Menggunakan Notebook
-
-Anda juga dapat menjelajahi proses end-to-end dengan notebook Jupyter:
-
-```bash
-jupyter notebook notebooks/end_to_end_process.ipynb
-```
-
 ## Fitur-fitur yang Digunakan
 
 Model prediksi churn menggunakan fitur-fitur berikut:
@@ -97,7 +89,6 @@ Model prediksi churn menggunakan fitur-fitur berikut:
 - **Scikit-learn**: Library machine learning untuk membuat model prediksi
 - **Matplotlib & Seaborn**: Visualisasi data
 - **Streamlit**: Framework untuk membuat aplikasi web interaktif
-- **Jupyter Notebook**: Untuk analisis eksploratori dan dokumentasi proses end-to-end
 
 ## Pengembangan Lanjutan
 
@@ -111,7 +102,7 @@ Beberapa ide untuk pengembangan aplikasi selanjutnya:
 
 ## Kontributor
 
-- [Nama Anda] - Pengembang Utama
+- Abdullah Ghifari - Main Contributor
 
 ## Lisensi
 
