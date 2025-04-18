@@ -84,7 +84,7 @@ def predict_churn(age, gender, purchase_amount, tenure):
 # Fungsi untuk menjalankan generate_dummy_data.py
 def generate_dummy_data():
     try:
-        result = subprocess.run(['python', 'scripts/generate_dummy_data.py'], 
+        result = subprocess.run(['python3', 'scripts/generate_dummy_data.py'], 
                                capture_output=True, text=True, check=True)
         return True, result.stdout
     except subprocess.CalledProcessError as e:
@@ -93,7 +93,7 @@ def generate_dummy_data():
 # Fungsi untuk menjalankan train_model.py
 def train_model():
     try:
-        result = subprocess.run(['python', 'scripts/train_model.py'], 
+        result = subprocess.run(['python3', 'scripts/train_model.py'], 
                                capture_output=True, text=True, check=True)
         return True, result.stdout
     except subprocess.CalledProcessError as e:
